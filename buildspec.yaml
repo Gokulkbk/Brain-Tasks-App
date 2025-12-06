@@ -17,10 +17,7 @@ phases:
       - docker build -t brain-tasks-app .
       - docker tag brain-tasks-app:latest 401646244080.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
 
-  post_build:
-    commands:
-      - echo Build completed on `date`
-      - docker push 401646244080.dkr.ecr.ap-south-1.amazonaws.com:latest
+ 
 
 artifacts:
   files:
