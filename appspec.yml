@@ -1,0 +1,11 @@
+# appspec.yml
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /opt/brain-tasks-app
+hooks:
+  AfterInstall:
+    - location: scripts/deploy.sh
+      timeout: 300
+      runas: root

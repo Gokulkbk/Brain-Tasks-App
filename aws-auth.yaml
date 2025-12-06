@@ -1,0 +1,13 @@
+mapUsers: |
+  - userarn: arn:aws:iam::401646244080:user/GokulDockeruser
+    username: gokuldockeruser
+    groups:
+      - system:masters
+      - syetme:nodes
+
+maproles: |
+  - rolearn: arn:aws:iam::401646244080:role/New-EC2-AWS-s3-codedeploy-access
+  - rolename: New-EC2-AWS-s3-codedeploy-access
+    groups:
+      - system:masters
+      - syetme:nodes
