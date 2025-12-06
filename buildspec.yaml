@@ -9,7 +9,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URI
+      - aws ecr get-login-password --region $ap-south-1 | docker login --gokulviveka AWS --AKIAV3A73KDYHLJ4TU5C-stdin $401646244080.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app
 
   build:
     commands:
