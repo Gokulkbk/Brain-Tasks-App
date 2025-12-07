@@ -1,185 +1,85 @@
-1. Clone Repository (Local/EC2)
+Completed Steps: CI/CD Pipeline Setup for Brain-Tasks-App
+1. Cloned Repository
+Cloned the Brain-Tasks-App repository from GitHub to local/EC2
 
-Cloned repo:
+Navigated into the project directory
 
-git clone https://github.com/Vennilavan12/Brain-Tasks-App.git
-cd Brain-Tasks-App
+2. Docker Setup & Configuration
+Created Dockerfile using Node 18 Alpine base image
 
-2️. Docker Setup
-Create Dockerfile
+Configured to copy dist/ directory and serve static content
 
-Use Node 18 Alpine.
+Created .dockerignore to exclude unnecessary files
 
-Copy dist/ directory.
+Built Docker image: brain-tasks-app:latest
 
-Install serve static server.
+Successfully ran container and tested at http://<EC2-public-ip>:3000
 
-Expose port 3000.
+3. Pushed Image to AWS ECR
+Created private ECR repository: brain-tasks-app
 
-Run app using:
+Authenticated Docker to ECR using AWS CLI
 
-CMD ["serve", "-s", "dist", "-l", "3000"]
+Tagged and pushed Docker image to ECR repository
 
-Create .dockerignore
+4. Created AWS EKS Cluster
+Set up EKS cluster named brain-tasks-eks using eksctl
 
-Ignore git folders, node_modules, IDE configs.
+Configured cluster with 2 t3.small worker nodes in ap-south-1 region
 
-Build & Run Docker Image
+Configured kubectl to access the EKS cluster
 
-Build:
+Verified cluster status with kubectl get nodes
 
-docker build -t brain-tasks-app:latest .
+5. Kubernetes Deployment & Service
+Created k8s/ directory for Kubernetes manifests
 
+Created deployment.yaml with 2 replicas using ECR image
 
-Run:
+Created service.yaml with LoadBalancer type (port 80 → 3000)
 
-docker run -d --name brain-tasks -p 3000:3000 brain-tasks-app:latest
+Applied Kubernetes manifests successfully
 
+Verified LoadBalancer endpoint accessibility
 
-Tested in browser:
+6. AWS CodeBuild – CI Implementation
+Created buildspec.yml with complete CI pipeline:
 
-http://<EC2-public-ip>:3000
+Pre-build: ECR login and image tagging
 
-3️. Push Image to AWS ECR
-Create ECR Repository
+Build: Docker image creation
 
-AWS Console → ECR → Create repository
+Post-build: Push to ECR and deployment file updates
 
-Name: brain-tasks-app
+Artifacts: Prepared for CodeDeploy (appspec.yml, k8s manifests, scripts)
 
-Visibility: Private
+Created CodeBuild project with:
 
-Authenticate Docker to ECR
-aws ecr get-login-password --region ap-south-1 | \
-docker login --username AWS --password-stdin awmyaccountID.dkr.ecr.ap-south-1.amazonaws.com
+GitHub source integration
 
-Tag & Push Image
-docker tag brain-tasks-app:latest <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
-docker push <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
+Amazon Linux 2 environment with privileged mode
 
-4️. Create AWS EKS Cluster Using eksctl
-Create Cluster
-eksctl create cluster \
-  --name brain-tasks-eks \
-  --region ap-south-1 \
-  --nodegroup-name standard-workers \
-  --node-type t3.small \
-  --nodes 2 \
-  --managed
+Configured AWS_ACCOUNT_ID environment variable
 
-Configure kubectl
-aws eks update-kubeconfig --region ap-south-1 --name brain-tasks-eks
-kubectl get nodes
+S3 artifact output configuration
 
-5️. Kubernetes Deployment & Service
-Create k8s Folder
-mkdir k8s
+7. AWS CodeDeploy – CD Implementation
+Created appspec.yml for deployment specifications
 
-Deployment YAML
+Created deploy.sh script for Kubernetes deployment:
 
-Deploy 2 replicas
+Updates kubeconfig
 
-Use ECR image
+Applies Kubernetes manifests
 
-Expose containerPort 3000
+Verifies deployment status
 
-Service YAML
+Set up CodeDeploy application for EC2/On-premises
 
-Type: LoadBalancer
+Configured Deployment Group with appropriate IAM roles and permissions
 
-Expose port 80 → targetPort 3000
+Connected EC2 instances running CodeDeploy agent
 
-Apply Manifests
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
+Successfully tested deployment using artifacts from CodeBuild
 
-Check LoadBalancer IP
-kubectl get svc brain-tasks-service
-
-6️. AWS CodeBuild – CI Step
-Purpose
-
-Build Docker image inside CodeBuild
-
-Push to ECR
-
-Update Kubernetes deployment with new image tag
-
-Export artifacts to S3 (for CodeDeploy)
-
-Create buildspec.yml
-
-Pre-build:
-
-Login to ECR
-
-Define image tag
-
-Build:
-
-Docker build
-
-Post-build:
-
-Docker push
-
-Replace image path in deployment.yaml
-
-Artifacts:
-
-appspec.yml
-
-k8s/*.yaml
-
-scripts/*.sh
-
-Create CodeBuild Project
-
-Source: GitHub
-
-Environment: Amazon Linux 2, Privileged mode ON
-
-Add environment variable:
-
-AWS_ACCOUNT_ID=<your-id>
-
-Output artifacts to S3 bucket
-
-7. AWS CodeDeploy – CD Step
-Create appspec.yml
-
-Files copied to /opt/brain-tasks-app
-
-AfterInstall hook runs deploy.sh
-
-Create deploy.sh
-
-Update kubeconfig
-
-Apply K8s manifests:
-
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
-
-
-Print pod list
-
-Setup CodeDeploy
-
-Create Application → EC2/On-premises
-
-Create Deployment Group:
-
-Attach IAM role with:
-
-EKS permissions
-
-S3
-
-CodeDeploy
-
-Select EC2 instance(s) running CodeDeploy agent
-
-Run Deployment
-
-Use S3 artifact from CodeBuild
+📊 Current Status: Complete end-to-end CI/CD pipeline operational with automated build, container registry push, and Kubernetes deployment via CodeBuild and CodeDeploy.
