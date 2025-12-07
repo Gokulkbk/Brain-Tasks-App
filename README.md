@@ -36,7 +36,7 @@ Run:
 docker run -d --name brain-tasks -p 3000:3000 brain-tasks-app:latest
 
 
-Test in browser:
+Tested in browser:
 
 http://<EC2-public-ip>:3000
 
@@ -51,7 +51,7 @@ Visibility: Private
 
 Authenticate Docker to ECR
 aws ecr get-login-password --region ap-south-1 | \
-docker login --username AWS --password-stdin <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com
+docker login --username AWS --password-stdin awmyaccountID.dkr.ecr.ap-south-1.amazonaws.com
 
 Tag & Push Image
 docker tag brain-tasks-app:latest <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
