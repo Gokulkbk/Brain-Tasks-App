@@ -1,14 +1,9 @@
 1. Clone Repository (Local/EC2)
 
-Clone repo:
+Cloned repo:
 
 git clone https://github.com/Vennilavan12/Brain-Tasks-App.git
 cd Brain-Tasks-App
-
-
-Verify dist/ folder exists (React app is already built).
-
-Serve static dist files using Docker later.
 
 2️. Docker Setup
 Create Dockerfile
