@@ -1,4 +1,4 @@
-1️⃣ Clone Repository (Local/EC2)
+1. Clone Repository (Local/EC2)
 
 Clone repo:
 
@@ -10,7 +10,7 @@ Verify dist/ folder exists (React app is already built).
 
 Serve static dist files using Docker later.
 
-2️⃣ Docker Setup
+2️. Docker Setup
 Create Dockerfile
 
 Use Node 18 Alpine.
@@ -45,7 +45,7 @@ Test in browser:
 
 http://<EC2-public-ip>:3000
 
-3️⃣ Push Image to AWS ECR
+3️. Push Image to AWS ECR
 Create ECR Repository
 
 AWS Console → ECR → Create repository
@@ -62,7 +62,7 @@ Tag & Push Image
 docker tag brain-tasks-app:latest <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
 docker push <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
 
-4️⃣ Create AWS EKS Cluster Using eksctl
+4️. Create AWS EKS Cluster Using eksctl
 Create Cluster
 eksctl create cluster \
   --name brain-tasks-eks \
@@ -76,7 +76,7 @@ Configure kubectl
 aws eks update-kubeconfig --region ap-south-1 --name brain-tasks-eks
 kubectl get nodes
 
-5️⃣ Kubernetes Deployment & Service
+5️. Kubernetes Deployment & Service
 Create k8s Folder
 mkdir k8s
 
@@ -101,7 +101,7 @@ kubectl apply -f k8s/service.yaml
 Check LoadBalancer IP
 kubectl get svc brain-tasks-service
 
-6️⃣ AWS CodeBuild – CI Step
+6️. AWS CodeBuild – CI Step
 Purpose
 
 Build Docker image inside CodeBuild
@@ -150,7 +150,7 @@ AWS_ACCOUNT_ID=<your-id>
 
 Output artifacts to S3 bucket
 
-7️⃣ AWS CodeDeploy – CD Step
+7. AWS CodeDeploy – CD Step
 Create appspec.yml
 
 Files copied to /opt/brain-tasks-app
